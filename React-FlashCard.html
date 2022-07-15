@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>React-FlashCard</title>
+	<script src="https://www.unpkg.com/react@16.14.0/umd/react.development.js" crossorigin></script>
+	<script src="https://www.unpkg.com/react-dom@16.14.0/umd/react-dom.development.js" crossorigin></script>
+	<script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+	<style >
+		.incorrect{
+			color: red;
+		}
+	</style>
+</head>
+<body>
+     <div id="app"></div>
+     <script type="text/babel">
+
+     	class App extends React.Component{
+           constructor(props) {
+           	super(props);
+           	this.state={
+           		num1:1,
+           		num2:1,
+           		score:0,
+           		response:"",
+           		incorrect:false
+           	}
+           }
+            
+			render(){
+				if(this.state.score >= 5){
+					return this.renderWin();
+				}else{
+			         return this.renderProblem();
+				}
+			}
+
+
+     		renderProblem(){
+     			return(
+					<div>
+					<h1 className={this.state.incorrect ? "incorrect":"" }>
+						{this.state.num1} + {this.state.num2}
+					</h1>
+						<input onKeyPress={this.inputKeyPress} onChange={this.uptadeResponse} value={this.state.response}/> 
+						score {this.state.score}
+     				</div>
+     			)
+     		}
+             
+             renderWin(){
+             	return(
+             		<h1>Congratulation! You Win</h1>
+             	);
+             }
+
+
+
+
+     		uptadeResponse = (event) => {
+             this.setState({
+             	response:event.target.value
+             })
+     		}
+
+
+
+     		inputKeyPress = (event) => {
+            
+     			if(event.key==="Enter"){
+     				console.log(event)
+     				const answer=parseInt(this.state.response);
+     				if(answer===this.state.num1+this.state.num2){
+     					this.setState(state =>({
+     						score:state.score+1,
+     						num1:Math.floor(Math.random()*10),
+     						num2:Math.floor(Math.random()*10),
+     						response:"",
+     						incorrect:false
+     					}));
+     				}else{
+                        this.setState({
+                        	response:"",
+                        	incorrect:true
+                        });
+     				}
+     			}
+
+     		}
+     	}
+       
+     	ReactDOM.render(<App />, document.querySelector("#app"));
+     </script>
+</body>
+</html>
